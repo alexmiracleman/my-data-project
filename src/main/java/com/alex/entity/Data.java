@@ -1,10 +1,12 @@
 package com.alex.entity;
 
 import jakarta.persistence.*;
+import org.hibernate.annotations.DynamicUpdate;
 
 import java.time.LocalDateTime;
 
 @Entity
+@DynamicUpdate
 public class Data {
     @Id
     @SequenceGenerator(
