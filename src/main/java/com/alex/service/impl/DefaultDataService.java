@@ -23,31 +23,22 @@ public class DefaultDataService implements DataService {
     }
 
     @Override
-    @Transactional
     public void process() {
 
         LocalDateTime localDateTime = LocalDateTime.now();
 
-        Pageable pageRequest = PageRequest.of(0, 5, Sort.by("id").ascending());
+        Pageable pageRequest = PageRequest.of(0, 50, Sort.by("id").ascending());
 
         Page<Data> dataPage;
-
-        int processedRows = 0;
 
         do {
             dataPage = dataRepository.findAll(pageRequest);
 
             List<Data> dataList = dataPage.getContent();
 
-            dataList.forEach(data -> data.setModifyAt(localDateTime));
+            dataList.forEach(data -> data.setModifyAt(LocalDateTime.now()));
 
             dataRepository.saveAll(dataList);
-
-            processedRows += dataList.size();
-
-            if (processedRows >= 300) {
-                throw new RuntimeException("Processed more than 300 rows");
-            }
 
             pageRequest = pageRequest.next();
 
